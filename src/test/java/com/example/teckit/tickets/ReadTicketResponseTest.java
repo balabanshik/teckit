@@ -1,8 +1,8 @@
-package com.example.teckit.requests;
+package com.example.teckit.tickets;
 
 import com.example.teckit.dao.Comment;
-import com.example.teckit.dao.Request;
-import com.example.teckit.dao.RequestType;
+import com.example.teckit.dao.Ticket;
+import com.example.teckit.dao.TicketType;
 import com.example.teckit.dao.User;
 import org.junit.jupiter.api.Test;
 
@@ -11,21 +11,21 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ReadResponseTest {
+class ReadTicketResponseTest {
     @Test
     public void createsFromDAO() {
         User u1 = new User();
         u1.setName("foo");
         User u2 = new User();
         u2.setName("baz");
-        Request src = new Request();
+        Ticket src = new Ticket();
         src.setId(123);
         src.setCreated(23);
         src.setCreatorId(314);
         src.setCreator(u1);
         src.setDescription("bar");
         src.setPriority(2);
-        src.setRequestType(RequestType.LEAK);
+        src.setRequestType(TicketType.LEAK);
         Comment c1 = new Comment();
         c1.setCreatorId(1);
         c1.setCreator(u1);
@@ -41,7 +41,7 @@ class ReadResponseTest {
         cl.add(c2);
         src.setComments(cl);
 
-        ReadResponse r = new ReadResponse(src);
+        ReadTicketResponse r = new ReadTicketResponse(src);
         assertEquals(123, r.getId());
         assertEquals(23, r.getTimestamp());
         assertEquals("foo", r.getCreator());

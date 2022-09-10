@@ -38,23 +38,11 @@ public class User {
         this.staff = staff;
     }
 
-    @Override
-    public boolean equals(Object o) {
-
-        if (this == o)
-            return true;
-        if (!(o instanceof User user))
-            return false;
-        return Objects.equals(this.id, user.id);
+    public StudentData getData() {
+        return data;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(this.id);
-    }
-
-    @Override
-    public String toString() {
-        return "User{" + "id=" + this.id + ", name='" + this.name + '\'' + '}';
+    public void setData(StudentData data) {
+        this.data = data;
     }
 }

@@ -8,7 +8,7 @@ public class Comment {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private long id;
 
-    private int requestId;
+    private int ticketId;
     private long timestamp;
     private int creatorId;
 
@@ -26,12 +26,12 @@ public class Comment {
         this.id = id;
     }
 
-    public int getRequestId() {
-        return requestId;
+    public int getTicketId() {
+        return ticketId;
     }
 
-    public void setRequestId(int requestId) {
-        this.requestId = requestId;
+    public void setTicketId(int requestId) {
+        this.ticketId = requestId;
     }
 
     public long getTimestamp() {

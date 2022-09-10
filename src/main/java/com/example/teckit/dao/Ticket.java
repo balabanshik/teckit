@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-public class Request {
+public class Ticket {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private int id;
@@ -16,7 +16,7 @@ public class Request {
     private User creator;
 
     @Enumerated(EnumType.STRING)
-    private RequestType requestType;
+    private TicketType ticketType;
 
     private String subject;
     private int priority;
@@ -59,12 +59,12 @@ public class Request {
         this.creator = creator;
     }
 
-    public RequestType getRequestType() {
-        return requestType;
+    public TicketType getRequestType() {
+        return ticketType;
     }
 
-    public void setRequestType(RequestType requestType) {
-        this.requestType = requestType;
+    public void setRequestType(TicketType ticketType) {
+        this.ticketType = ticketType;
     }
 
     public String getSubject() {
