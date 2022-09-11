@@ -8,5 +8,6 @@ import java.util.List;
 // CRUD refers Create, Read, Update, Delete
 
 public interface CommentRepository extends CrudRepository<Comment, Integer> {
-    List<Comment> findByRequestId(int requestId);
+    List<Comment> findByTicketId(int ticketId);
+    long deleteByTicketId(int ticketId);
 }

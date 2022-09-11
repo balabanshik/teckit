@@ -8,6 +8,7 @@ public class ResponseEntry {
     private String subject;
     private long timestamp;
     private int priority;
+    private String status;
     private String requestType;
     private String description;
 
@@ -21,6 +22,10 @@ public class ResponseEntry {
 
     public String getSubject() {
         return subject;
+    }
+
+    public String getStatus() {
+        return status;
     }
 
     public long getTimestamp() {
@@ -44,7 +49,9 @@ public class ResponseEntry {
         this.timestamp = ticket.getCreated();
         this.creator = ticket.getCreator().getName();
         this.priority = ticket.getPriority();
-        this.requestType = ticket.getRequestType().toString();
+        this.status = ticket.getStatus().toString();
+        this.subject = ticket.getSubject();
+        this.requestType = ticket.getTicketType().toString();
         this.description = ticket.getDescription();
     }
 }

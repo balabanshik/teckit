@@ -25,7 +25,9 @@ class ReadTicketResponseTest {
         src.setCreator(u1);
         src.setDescription("bar");
         src.setPriority(2);
-        src.setRequestType(TicketType.LEAK);
+        src.setSubject("plugh");
+        src.setStatus(TicketStatus.COMPLETE);
+        src.setTicketType(TicketType.LEAK);
         Comment c1 = new Comment();
         c1.setCreatorId(1);
         c1.setCreator(u1);
@@ -47,6 +49,8 @@ class ReadTicketResponseTest {
         assertEquals("foo", r.getCreator());
         assertEquals("bar", r.getDescription());
         assertEquals(2, r.getPriority());
+        assertEquals("plugh", r.getSubject());
+        assertEquals("COMPLETE", r.getStatus());
         assertEquals("LEAK", r.getRequestType());
         assertEquals(2, r.getComments().size());
         assertEquals(11, r.getComments().get(0).getTimestamp());

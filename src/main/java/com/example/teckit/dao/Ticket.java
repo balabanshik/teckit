@@ -1,5 +1,7 @@
 package com.example.teckit.dao;
 
+import com.example.teckit.tickets.TicketStatus;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -17,6 +19,8 @@ public class Ticket {
 
     @Enumerated(EnumType.STRING)
     private TicketType ticketType;
+    @Enumerated(EnumType.ORDINAL)
+    private TicketStatus status;
 
     private String subject;
     private int priority;
@@ -59,12 +63,20 @@ public class Ticket {
         this.creator = creator;
     }
 
-    public TicketType getRequestType() {
+    public TicketType getTicketType() {
         return ticketType;
     }
 
-    public void setRequestType(TicketType ticketType) {
+    public void setTicketType(TicketType ticketType) {
         this.ticketType = ticketType;
+    }
+
+    public TicketStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(TicketStatus status) {
+        this.status = status;
     }
 
     public String getSubject() {

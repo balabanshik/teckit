@@ -10,6 +10,7 @@ public class User {
     private Integer id;
     private String name;
     private boolean staff;
+    private boolean admin;
 
     @Transient
     private StudentData data;
@@ -36,6 +37,14 @@ public class User {
 
     public void setStaff(boolean staff) {
         this.staff = staff;
+    }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
 
     public StudentData getData() {

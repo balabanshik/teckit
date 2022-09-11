@@ -3,6 +3,9 @@ package com.example.teckit.dao;
 import javax.persistence.*;
 
 @Entity
+@Table(indexes = {
+        @Index(columnList = "ticketId")
+})
 public class Comment {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
