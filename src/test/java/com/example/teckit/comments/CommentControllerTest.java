@@ -1,24 +1,20 @@
 package com.example.teckit.comments;
 
 import com.example.teckit.dao.*;
+import com.example.teckit.external.NotificationSender;
 import com.example.teckit.tickets.TicketStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -28,6 +24,9 @@ import static org.mockito.Mockito.*;
 class CommentControllerTest {
     @Mock
     DAL dal;
+
+    @Mock
+    NotificationSender notificationSender;
 
     @InjectMocks
     CommentController commentController;
@@ -91,6 +90,31 @@ class CommentControllerTest {
         assertTrue(Math.abs(System.currentTimeMillis() - rc.getTimestamp()) < 100);
     }
 
+    @Test
+    public void addCommentSendsNotifications() {
+        User u = generateUser(2,false);
+        when(dal.findUser(2)).thenReturn(u);
+        AddCommentRequest req = new AddCommentRequest();
+        req.userId = 2;
+        req.ticketId = 111;
+        req.text = "foo bar";
+        Ticket t = generateTicket(111);
+        when(dal.findTicket(111)).thenReturn(t);
+        when(dal.createOrUpdateComment(any(Comment.class))).thenReturn(17L);
+
+        long r = commentController.addComment(req);
+        var cu = ArgumentCaptor.forClass(User.class);
+        var ct = ArgumentCaptor.forClass(Ticket.class);
+        var cc = ArgumentCaptor.forClass(Comment.class);
+        // Should be called 2 times, for users 314 (creator) and 1 (another commenter); 2 is not called
+        verify(notificationSender, times(2)).onCommentAddedToTrackedTicket(cu.capture(), ct.capture(), cc.capture());
+        assertTrue(ct.getAllValues().stream().allMatch(i -> t == i));
+        assertTrue(cc.getAllValues().stream().allMatch(c -> c.getText().equals("foo bar")));
+        var idSet = cu.getAllValues().stream().map(User::getId).collect(Collectors.toSet());
+        assertTrue(idSet.contains(314));
+        assertTrue(idSet.contains(1));
+    }
+
     //region Generators
     private User generateUser(int id, boolean isStaff) {
         User u = new User();
@@ -102,15 +126,20 @@ class CommentControllerTest {
     }
 
     private Ticket generateTicket(int id) {
+        User u0 = new User();
+        u0.setId(314);
+        u0.setName("creator");
         User u1 = new User();
+        u1.setId(1);
         u1.setName("foo");
         User u2 = new User();
+        u2.setId(2);
         u2.setName("baz");
         Ticket src = new Ticket();
         src.setId(id);
         src.setCreated(23);
         src.setCreatorId(314);
-        src.setCreator(u1);
+        src.setCreator(u0);
         src.setSubject("zyx");
         src.setStatus(TicketStatus.OPEN);
         src.setDescription("bar");
